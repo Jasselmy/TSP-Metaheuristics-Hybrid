@@ -1,0 +1,5 @@
+Méthode,Distance,Temps (s)
+Greedy,2356,0.0
+Threshold Accepting,2159,1.427
+Simulated Annealing,2072,1.75
+Hybrid,2058,3.225
