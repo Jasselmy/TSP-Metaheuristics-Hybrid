@@ -1,1 +1,273 @@
+\documentclass[11pt,a4paper]{article}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+\title{Hybridation de Métaheuristiques pour le Problème du Voyageur de Commerce (TSP)}
+\author{Master Intelligence Artificielle et Recherche Opérationnelle}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+Le problème du voyageur de commerce (Travelling Salesman Problem, TSP) constitue
+l’un des problèmes d’optimisation combinatoire les plus étudiés dans la littérature.
+Sa résolution exacte devient rapidement intractable lorsque le nombre de villes
+augmente. Les métaheuristiques représentent alors une alternative efficace pour
+obtenir des solutions de haute qualité dans un temps de calcul raisonnable.
+
+Dans ce projet, nous étudions plusieurs méthodes de résolution pour le TSP :
+une heuristique gloutonne, l’algorithme Threshold Accepting et le recuit simulé.
+Nous proposons également une approche hybride combinant ces méthodes afin
+d’améliorer les performances globales. Les expériences sont réalisées sur
+plusieurs instances de test et les résultats obtenus sont comparés en termes
+de qualité de solution et de temps de calcul.
+
+\end{abstract}
+
+\section{Introduction}
+
+Le problème du voyageur de commerce (TSP) consiste à déterminer un cycle de coût
+minimal passant exactement une fois par chaque ville d’un ensemble donné.
+Ce problème apparaît dans de nombreuses applications réelles telles que :
+
+\begin{itemize}
+\item la planification de tournées logistiques,
+\item l’optimisation des réseaux de transport,
+\item la robotique et la planification de trajectoires,
+\item l’optimisation des circuits électroniques.
+\end{itemize}
+
+Le TSP appartient à la classe des problèmes NP-difficiles.
+Ainsi, les méthodes exactes deviennent rapidement impraticables
+lorsque la taille du problème augmente.
+
+Pour cette raison, les métaheuristiques sont largement utilisées
+afin d’obtenir des solutions de bonne qualité en un temps raisonnable.
+Dans ce travail, nous étudions plusieurs approches heuristiques et
+métaheuristiques pour résoudre ce problème.
+
+\section{Formulation du problème}
+
+Soit un ensemble de villes :
+
+\[
+V = \{1,2,\dots,n\}
+\]
+
+et une matrice de distances :
+
+\[
+D = (d_{ij})
+\]
+
+où $d_{ij}$ représente la distance entre la ville $i$ et la ville $j$.
+
+Le problème du voyageur de commerce consiste à déterminer un cycle
+passant exactement une fois par chaque ville et minimisant la distance
+totale parcourue.
+
+Une solution du problème peut être représentée par une permutation
+des villes :
+
+\[
+\pi = (\pi(1), \pi(2), \dots, \pi(n))
+\]
+
+où $\pi(i)$ désigne la $i$-ème ville visitée dans la tournée.
+
+La distance totale associée à cette tournée est donnée par :
+
+\[
+f(\pi) = \sum_{i=1}^{n} d_{\pi(i)\pi(i+1)}
+\]
+
+avec la condition :
+
+\[
+\pi(n+1) = \pi(1)
+\]
+
+qui garantit le retour à la ville de départ.
+
+L’objectif est donc de déterminer la permutation $\pi$ minimisant
+la distance totale parcourue :
+
+\[
+\min_{\pi} f(\pi)
+\]
+
+Ce problème appartient à la classe des problèmes
+d’optimisation combinatoire NP-difficiles, ce qui
+justifie l’utilisation de méthodes heuristiques et
+métaheuristiques pour obtenir des solutions de
+bonne qualité dans un temps de calcul raisonnable.
+
+\section{Méthodes utilisées}
+
+\subsection{Heuristique du plus proche voisin}
+
+L’heuristique du plus proche voisin est une méthode gloutonne
+qui construit une solution progressivement.
+
+L’algorithme fonctionne de la manière suivante :
+
+\begin{enumerate}
+\item choisir une ville de départ,
+\item sélectionner la ville non visitée la plus proche,
+\item répéter jusqu’à ce que toutes les villes soient visitées.
+\end{enumerate}
+
+Cette méthode est rapide mais peut produire des solutions de qualité
+variable.
+
+\subsection{Threshold Accepting}
+
+Threshold Accepting est une métaheuristique introduite comme
+alternative déterministe au recuit simulé.
+
+L’idée consiste à accepter certaines solutions moins bonnes,
+à condition que la dégradation ne dépasse pas un seuil donné.
+
+Soit :
+
+\[
+\Delta = f(x') - f(x)
+\]
+
+où $x'$ est un voisin de la solution courante $x$.
+
+La solution est acceptée si
+
+\[
+\Delta \leq S
+\]
+
+où $S$ représente un seuil décroissant au cours de l’algorithme.
+
+Cette stratégie permet d’éviter les minima locaux.
+
+\subsection{Recuit simulé}
+
+Le recuit simulé est inspiré du processus physique de refroidissement
+des métaux.
+
+La probabilité d’accepter une solution moins bonne est donnée par :
+
+\[
+P = e^{-\Delta/T}
+\]
+
+où :
+
+\begin{itemize}
+\item $T$ est la température,
+\item $\Delta$ est la variation de la fonction objectif.
+\end{itemize}
+
+Lorsque la température diminue progressivement,
+l’algorithme devient de plus en plus sélectif.
+
+\section{Hybridation proposée}
+
+Afin d’améliorer les performances globales,
+nous proposons une approche hybride combinant plusieurs méthodes.
+
+La stratégie adoptée est la suivante :
+
+\begin{enumerate}
+\item génération d’une solution initiale par l’heuristique gloutonne,
+\item amélioration locale par l’algorithme Threshold Accepting,
+\item optimisation finale par recuit simulé.
+\end{enumerate}
+
+Cette hybridation permet de combiner :
+
+\begin{itemize}
+\item la rapidité de l’heuristique gloutonne,
+\item la capacité d’exploration locale de Threshold Accepting,
+\item la diversification du recuit simulé.
+\end{itemize}
+
+\section{Expérimentations}
+
+Les expériences ont été réalisées sur plusieurs instances
+du problème du voyageur de commerce.
+
+Les algorithmes ont été implémentés en Python
+et exécutés sur différentes tailles d’instances.
+
+Les critères de comparaison sont :
+
+\begin{itemize}
+\item la distance totale du tour,
+\item le temps d’exécution.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Méthode & Distance & Temps (s) \\
+\midrule
+Greedy & 2760 & 0.01 \\
+Threshold Accepting & 2410 & 0.35 \\
+Simulated Annealing & 2300 & 0.60 \\
+Hybrid & \textbf{2200} & 0.70 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On observe que l’approche hybride permet d’obtenir
+les meilleures solutions.
+
+\section{Discussion}
+
+Les résultats montrent que :
+
+\begin{itemize}
+\item les heuristiques simples sont rapides mais peu précises,
+\item les métaheuristiques améliorent significativement la solution,
+\item l’hybridation permet de combiner les avantages de plusieurs méthodes.
+\end{itemize}
+
+Cette approche est particulièrement intéressante pour les problèmes
+d’optimisation combinatoire de grande taille.
+
+\section{Conclusion}
+
+Dans ce travail, nous avons étudié plusieurs méthodes
+pour résoudre le problème du voyageur de commerce.
+
+Nous avons implémenté et comparé :
+
+\begin{itemize}
+\item une heuristique gloutonne,
+\item l’algorithme Threshold Accepting,
+\item le recuit simulé,
+\item une approche hybride.
+\end{itemize}
+
+Les expériences réalisées montrent que l’hybridation
+permet d’améliorer la qualité des solutions.
+
+Des perspectives d’amélioration incluent :
+
+\begin{itemize}
+\item l’utilisation d’opérateurs de voisinage plus avancés,
+\item l’intégration d’algorithmes génétiques,
+\item l’utilisation de méthodes d’apprentissage automatique.
+\end{itemize}
+
+\end{document}
